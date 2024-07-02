@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-7 index</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <div id="app"></div>  <!-- doble llave: expresión de javascript -->
+    <script>
+        //Tomamos una instancia de Vue y generamos una nueva aplicación
+        //le decimos que la monte sobre el elemento con id = app
+        const vm = Vue.createApp({
+            //esta función siempre retornará un JSON
+            data() {
+                return {
+                    //text: "<p>Hola vue</p>"
+                    attr: "src", //podemos ponerle attr: "alt", y funcionaria el alt
+                    img: "https://picsum.photos/200/300"
+                };
+            },
+            //template: `<div v-once v-html="text"></div>`
+            template: `<img v-bind:[attr]="img" v-bind:alt="img" />`
+        }).mount("#app");
+        console.log(vm);
+    </script>
+</body>
+</html>
