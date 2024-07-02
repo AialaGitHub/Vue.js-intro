@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 Listas</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <div id="app"></div>  
+    <script>
+        const vm = Vue.createApp({
+            data() {
+                return {
+                    text: "Accede a tu cuenta",
+                    username: "",
+                    open: false,
+                    posts: [{
+                        title: "Este es el título 1",
+                        description: "Y esta de aquí es la descripción 1"
+                    },
+                    {
+                        title: "Este es el título 2",
+                        description: "Y esta de aquí es la descripción 2"
+                    },
+                    {
+                        title: "Este es el título 3",
+                        description: "Y esta de aquí es la descripción 3"
+                    }],
+                    newPost : {
+                        title: '',
+                        description: '',
+                    },
+                  };
+            },
+            watch: {
+                open(value) {
+                    if (value){
+                        this.text = "Cierra sesión";
+                     } else {
+                        this.text = "Accede a tu cuenta";
+                        this.username = "";
+                    }
+                }
+            },
+            computed: {
+                label() {
+                    return this.open ? "Salir" : "Acceder"
+                },
+                styles() {
+                    return this.open ? ['open'] : ['closed'];
+                },
+                validarPost () {
+                    return this.newPost.title.length === 0 || this.newPost.description.length === 0 
+                }
+            },
+            methods: {
+                addPost() {
+                    this.posts.push(this.newPost);
+                    this.newPost = {
+                        title: '',
+                        description: '',
+                    }
+                },
+                deletePost(index){
+                    if (index < this.posts.length){
+                        this.posts.splice(index, 1);
+                    }
+                }
+            },
+             template: `
+                <div class="container" :class="styles"> 
+                    <h2>{{ text }} </h2>
+                    <div v-if="open">
+                        <p>Hola, {{ username}}, estos son tus posts: </p>
+                        <div class="list">
+                            <div v-for="(item, i) in posts" :key="i" class="item">
+                                <div class="title">{{ item.title }}</div>
+                                <p>{{ item.description }}</p>
+                                <button @click="deletePost(i)">Eliminar</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div>Agrega un nuevo post: </div>
+                            <div>Título: </div>
+                            <div><input type="text" v-model="newPost.title" /></div>
+                            <div>Descripción: </div>
+                            <div><input type="text" v-model="newPost.description" /></div>
+                            <button @click="addPost">Agregar</button>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div>Nombre de usuario: </div>
+                        <input type="text" v-model="username" />
+                    </div>
+                    <button @click="open=!open">
+                        <div v-if="!open">Acceder</div>
+                        <div v-else>Salir</div>
+                    </button>
+                </div>
+            `
+        }).mount("#app");
+    </script>
+
+<style>
+    html, body {
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    #app, .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+    button {
+        margin-top: 24px;
+        border: none;
+        background-color: white;
+        padding: 8px 24px;
+        border-radius: 12px;
+    }
+    .closed {
+        background-color: #eca1a6;
+    }
+    .open {
+        background-color: #b5e7a0;
+    }
+    .list {
+        display: flex;
+        flex-direction: column;
+    }
+    .item {
+        border: 1px solid black;
+    }
+    .title {
+        font-weight: bold;
+        font-size: 1.3rem;
+    }
+
+</style>
+</body>
+</html>
